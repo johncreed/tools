@@ -1,0 +1,35 @@
+#! /bin/bash
+
+size=15
+
+if [ ! -z "$1" ]
+then
+    size=$1
+fi
+
+level1(){
+    tr -cd '[:alnum:]' < /dev/urandom | fold -w${size} | head -n1
+}
+
+level2(){
+    special_char_len=5
+    alnum_char_len=`echo "${size} - ${special_char_len}" | bc -l`
+    special_char=`tr -cd '@#$%' < /dev/urandom | fold -w${special_char_len} | head -n1`
+    alnum_char=`tr -cd '[:alnum:]' < /dev/urandom | fold -w${alnum_char_len} | head -n1`
+    res_char=`echo "${special_char}${alnum_char}" | fold -w1 | shuf | tr -d '\n' `
+    echo ${res_char}
+}
+
+level3(){
+    special_char_len=5
+    alnum_char_len=`echo "${size} - ${special_char_len}" | bc -l`
+    special_char=`tr -cd '!@#$%^+=' < /dev/urandom | fold -w${special_char_len} | head -n1`
+    alnum_char=`tr -cd '[:alnum:]' < /dev/urandom | fold -w${alnum_char_len} | head -n1`
+    res_char=`echo "${special_char}${alnum_char}" | fold -w1 | shuf | tr -d '\n' `
+    echo ${res_char}
+}
+
+level1
+level2
+level3
+
